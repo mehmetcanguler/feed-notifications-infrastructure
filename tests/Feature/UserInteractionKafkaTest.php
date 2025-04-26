@@ -30,7 +30,7 @@ class UserInteractionKafkaTest extends TestCase
             'metadata' => ['sample_key' => 'sample_value'],
         ]);
 
-        $response->assertCreated(); 
+        $response->assertCreated();
 
         $this->assertDatabaseHas('user_interactions', [
             'user_id' => $user->id,

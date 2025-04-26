@@ -2,15 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Contracts\UserInteractionServiceInterface;
 use App\DataTransferObjects\KafkaMessageData;
 use App\Enums\KafkaTopics;
 use App\Events\UserInteractionCreated;
 use App\Jobs\SendKafkaMessageJob;
 use App\Jobs\SendUserInteractionToStreamJob;
-use Cache;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class UserInteractionListener
 {
@@ -40,6 +36,6 @@ class UserInteractionListener
         SendKafkaMessageJob::dispatch(KafkaTopics::USER_INTERACTIONS, $data);
 
         // Redis Stream'e ekle
-        SendUserInteractionToStreamJob::dispatch( $data);
+        SendUserInteractionToStreamJob::dispatch($data);
     }
 }

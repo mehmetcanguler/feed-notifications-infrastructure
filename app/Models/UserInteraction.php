@@ -17,6 +17,7 @@ class UserInteraction extends Model
         'target_id',
         'metadata',
     ];
+
     protected $casts = [
         'user_action' => UserAction::class,
         'platform_type' => PlatformType::class,

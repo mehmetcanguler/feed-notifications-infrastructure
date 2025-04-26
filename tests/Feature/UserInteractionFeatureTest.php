@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Events\UserInteractionCreated;
-use App\Models\User;
-use App\Models\UserInteraction;
 use App\Contracts\UserInteractionServiceInterface;
 use App\DataTransferObjects\UserInteractionData;
+use App\Events\UserInteractionCreated;
+use App\Models\User;
 use Event;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class UserInteractionFeatureTest extends TestCase
@@ -42,7 +41,7 @@ class UserInteractionFeatureTest extends TestCase
 
         Event::assertDispatched(UserInteractionCreated::class);
 
-        //test ortamında listeneri manuel çağırıyoruz
+        // test ortamında listeneri manuel çağırıyoruz
 
         $listener = app(\App\Listeners\UserInteractionListener::class);
         $listener->handle(new UserInteractionCreated($userInteraction));

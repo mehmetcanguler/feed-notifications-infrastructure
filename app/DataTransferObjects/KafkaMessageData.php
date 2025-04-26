@@ -12,9 +12,8 @@ class KafkaMessageData
         public int $targetId,
         public array $metadata,
         public string $timestamp
-    ) {
+    ) {}
 
-    }
     public function toArray(): array
     {
         return [

@@ -3,10 +3,8 @@
 namespace App\Services;
 
 use App\Contracts\UserInteractionServiceInterface;
-use App\DataTransferObjects\KafkaMessageData;
 use App\DataTransferObjects\UserInteractionData;
 use App\Events\UserInteractionCreated;
-use App\Jobs\SendKafkaMessageJob;
 use App\Models\UserInteraction;
 use Illuminate\Support\Facades\Cache;
 
@@ -14,9 +12,6 @@ class UserInteractionService implements UserInteractionServiceInterface
 {
     /**
      * Create a new user interaction and store it in the cache.
-     *
-     * @param \App\DataTransferObjects\UserInteractionData $data
-     * @return \App\Models\UserInteraction
      */
     public function createInteraction(UserInteractionData $data): UserInteraction
     {
@@ -39,9 +34,6 @@ class UserInteractionService implements UserInteractionServiceInterface
 
     /**
      * Get the user interaction from cache.
-     *
-     * @param int $userId
-     * @return \App\Models\UserInteraction|null
      */
     public function getUserInteractionFromCache(int $userId): ?UserInteraction
     {

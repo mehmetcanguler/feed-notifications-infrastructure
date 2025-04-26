@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\RedisStreams;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
-use App\Enums\RedisStreams;
 use Throwable;
 
 class ConsumeUserInteractionsRedis extends Command
@@ -47,26 +47,26 @@ class ConsumeUserInteractionsRedis extends Command
     {
         try {
             Redis::executeRaw([
-                'XGROUP', 'CREATE', 
-                RedisStreams::USER_INTERACTIONS->value, 
-                $this->option('group'), 
-                '0', 
-                'MKSTREAM'
+                'XGROUP', 'CREATE',
+                RedisStreams::USER_INTERACTIONS->value,
+                $this->option('group'),
+                '0',
+                'MKSTREAM',
             ]);
         } catch (Throwable $e) {
-            $this->warn('Consumer group already exists: ' . $e->getMessage());
+            $this->warn('Consumer group already exists: '.$e->getMessage());
         }
     }
 
     private function fetchMessages(string $stream, string &$lastId): array
     {
         return Redis::executeRaw([
-            'XREADGROUP', 'GROUP', 
-            $this->option('group'), 
-            $this->option('consumer'), 
-            'COUNT', $this->option('count'), 
-            'BLOCK', $this->option('block'), 
-            'STREAMS', $stream, $lastId
+            'XREADGROUP', 'GROUP',
+            $this->option('group'),
+            $this->option('consumer'),
+            'COUNT', $this->option('count'),
+            'BLOCK', $this->option('block'),
+            'STREAMS', $stream, $lastId,
         ]) ?? [];
     }
 
@@ -77,7 +77,6 @@ class ConsumeUserInteractionsRedis extends Command
 
         try {
             $this->displayMessage($entries);
-            $this->handleBusinessLogic($entries);
             $this->acknowledgeMessage($stream, $messageId);
         } catch (Throwable $e) {
             $this->handleMessageError($e, $messageId, $entries);
@@ -92,14 +91,15 @@ class ConsumeUserInteractionsRedis extends Command
             $value = $entry[$i + 1];
             $result[$key] = $this->parseValue($key, $value);
         }
+
         return $result;
     }
 
     private function parseValue(string $key, mixed $value): mixed
     {
-        return match($key) {
+        return match ($key) {
             'metadata' => json_decode($value, true) ?? [],
-            'user_id', 'target_id' => (int)$value,
+            'user_id', 'target_id' => (int) $value,
             'timestamp' => \DateTime::createFromFormat('Y-m-d H:i:s', $value),
             default => $value
         };
@@ -107,13 +107,13 @@ class ConsumeUserInteractionsRedis extends Command
 
     private function displayMessage(array $data): void
     {
-        $this->info("\n📩 New Message Received: " . now()->toDateTimeString());
-        
+        $this->info("\n📩 New Message Received: ".now()->toDateTimeString());
+
         $tableData = [];
         foreach ($data as $key => $value) {
             $tableData[] = [
                 'Field' => $this->formatFieldName($key),
-                'Value' => $this->formatValue($key, $value)
+                'Value' => $this->formatValue($key, $value),
             ];
         }
 
@@ -135,42 +135,35 @@ class ConsumeUserInteractionsRedis extends Command
             return $value->format('Y-m-d H:i:s');
         }
 
-        return (string)$value;
-    }
-
-    private function handleBusinessLogic(array $data): void
-    {
-        // Örnek iş mantığı - Kendi kodunuzla değiştirin
-        // $this->saveToDatabase($data);
-        // $this->sendToExternalService($data);
+        return (string) $value;
     }
 
     private function acknowledgeMessage(string $stream, string $messageId): void
     {
         Redis::executeRaw([
-            'XACK', 
-            $stream, 
-            $this->option('group'), 
-            $messageId
+            'XACK',
+            $stream,
+            $this->option('group'),
+            $messageId,
         ]);
     }
 
     private function handleError(Throwable $e): void
     {
-        $this->error('[❗] System Error: ' . $e->getMessage());
+        $this->error('[❗] System Error: '.$e->getMessage());
         logger()->error('Stream Consumer Error', [
             'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString()
+            'trace' => $e->getTraceAsString(),
         ]);
     }
 
     private function handleMessageError(Throwable $e, string $messageId, array $data): void
     {
-        $this->error("[❗] Message Processing Failed (ID: $messageId): " . $e->getMessage());
+        $this->error("[❗] Message Processing Failed (ID: $messageId): ".$e->getMessage());
         logger()->error('Message Processing Error', [
             'message_id' => $messageId,
             'data' => $data,
-            'error' => $e->getMessage()
+            'error' => $e->getMessage(),
         ]);
     }
 }

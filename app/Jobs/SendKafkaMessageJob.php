@@ -6,9 +6,9 @@ use App\Contracts\KafkaProducerServiceInterface;
 use App\DataTransferObjects\KafkaMessageData;
 use App\Enums\KafkaTopics;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 class SendKafkaMessageJob implements ShouldQueue

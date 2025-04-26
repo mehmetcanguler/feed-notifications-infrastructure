@@ -21,13 +21,12 @@ class SendUserInteractionToStreamJob implements ShouldQueue
     /**
      * Execute the job.
      */
-
     public function handle(): void
     {
         $command = [
             'XADD',
             RedisStreams::USER_INTERACTIONS->value,
-            '*'
+            '*',
         ];
 
         $fields = [
@@ -47,8 +46,5 @@ class SendUserInteractionToStreamJob implements ShouldQueue
 
         Redis::executeRaw($command);
 
-
     }
-
-
 }

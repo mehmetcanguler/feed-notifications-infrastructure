@@ -2,8 +2,8 @@
 
 namespace App\DataTransferObjects;
 
-use App\Enums\UserAction;
 use App\Enums\PlatformType;
+use App\Enums\UserAction;
 use Illuminate\Http\Request;
 
 class UserInteractionData
@@ -19,10 +19,6 @@ class UserInteractionData
         //
     }
 
-    /**
-     * @param Request $request 
-     * @return self 
-     */
     public static function fromRequest(Request $request): self
     {
         $validated = $request->validated();

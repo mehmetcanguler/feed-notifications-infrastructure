@@ -9,6 +9,7 @@ use Junges\Kafka\Message\ConsumedMessage;
 class ConsumeUserInteractionsKafka extends Command
 {
     protected $signature = 'kafka:listen';
+
     protected $description = 'Kafka" üzerindeki mesajları tdinler';
 
     public function handle()
@@ -22,7 +23,7 @@ class ConsumeUserInteractionsKafka extends Command
 
                 $prettyPayload = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-                $this->info("✅ Gelen Mesaj:");
+                $this->info('✅ Gelen Mesaj:');
                 $this->line($prettyPayload);
 
             })

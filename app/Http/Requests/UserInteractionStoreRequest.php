@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Enums\UserAction;
 use App\Enums\PlatformType;
+use App\Enums\UserAction;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
-
-
 
 class UserInteractionStoreRequest extends FormRequest
 {
@@ -42,10 +40,9 @@ class UserInteractionStoreRequest extends FormRequest
             'metadata.location' => ['nullable', 'string'],
         ];
     }
+
     /**
      * Get custom body parameters for Scribe.
-     *
-     * @return array
      */
     public function bodyParameters(): array
     {
@@ -108,9 +105,8 @@ class UserInteractionStoreRequest extends FormRequest
             ],
             'metadata.location' => [
                 'description' => 'Kullanıcının konumu.',
-                'example' => 'İstanbul, Türkiye',    
-            ]
+                'example' => 'İstanbul, Türkiye',
+            ],
         ];
     }
-    
 }

@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use Junges\Kafka\Facades\Kafka;
 use App\Enums\KafkaTopics;
-
+use Junges\Kafka\Facades\Kafka;
 
 class KafkaEmailPublisherService
 {
